@@ -1,0 +1,21 @@
+---
+php7_version: "{{ php_version | default('7.2') }}"
+
+php_extensions:
+  - "php{{ php7_version }}-cli"
+  - "php{{ php7_version }}-gd"
+  - "php{{ php7_version }}-pgsql"
+  - "php{{ php7_version }}-mongodb"
+  - "php{{ php7_version }}-memcached"
+  - "php{{ php7_version }}-curl"
+  - "php{{ php7_version }}-intl"
+  - "php{{ php7_version }}-dev"
+  - "php{{ php7_version }}-xml"
+  - "php{{ php7_version }}-mbstring"
+  - "php{{ php7_version }}-bcmath"
+  - "php{{ php7_version }}-fpm"
+  - php-pear
+
+php_http_connector: apache # fpm or apache
+
+php_ini_lines: []

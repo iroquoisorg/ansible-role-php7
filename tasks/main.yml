@@ -1,0 +1,63 @@
+---
+- name: Add PHP 7 repo
+  apt_repository: >
+    repo=ppa:ondrej/php
+    update_cache=true
+  when: ansible_os_family == 'Debian'
+
+- name: Install PHP-FPM
+  apt:
+    name: "php{{ php7_version }}-fpm"
+    state: latest
+  when: php_http_connector == 'fpm'
+
+- name: Install PHP
+  apt: name="php{{ php7_version }}" state=latest
+
+- name: Install PHP packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ php_extensions }}"
+
+- name: Install apache2 php7 module
+  apt:
+    name: "libapache2-mod-php{{ php7_version }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: "{{ apt_cache_valid_time | default(3600) }}"
+  when: php_http_connector == 'apache'
+
+- name: Register apache php.ini directory state
+  stat:
+    path: "/etc/php/{{ php7_version }}/apache2/conf.d"
+  register: php7_ini_apache
+
+- name: Configure PHP APACHE
+  template:
+    src: php_config.ini.j2
+    dest: "/etc/php/{{ php7_version }}/apache2/conf.d/php_config.ini"
+  when: php7_ini_apache.stat.isdir is defined and php7_ini_apache.stat.isdir
+
+- name: Register CLI php.ini directory state
+  stat:
+    path: "/etc/php/{{ php7_version }}/cli/conf.d"
+  register: php7_ini_cli
+
+- name: Configure PHP CLI
+  template:
+    src: php_config.ini.j2
+    dest: "/etc/php/{{ php7_version }}/cli/conf.d/php_config.ini"
+  when: php7_ini_cli.stat.isdir is defined and php7_ini_cli.stat.isdir
+
+- name: Register FPM php.ini directory state
+  stat:
+    path: "/etc/php/{{ php7_version }}/fpm/conf.d"
+  register: php7_ini_fpm
+
+- name: Configure PHP FPM
+  template:
+    src: php_config.ini.j2
+    dest: "/etc/php/{{ php7_version }}/fpm/conf.d/php_config.ini"
+  when: php7_ini_fpm.stat.isdir is defined and php7_ini_fpm.stat.isdir
+
