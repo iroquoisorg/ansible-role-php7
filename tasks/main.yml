@@ -8,23 +8,25 @@
 - name: Install PHP-FPM
   apt:
     name: "php{{ php7_version }}-fpm"
-    state: latest
+    state: present
   when: php_http_connector == 'fpm'
 
 - name: Install PHP
-  apt: name="php{{ php7_version }}" state=latest
+  apt:
+    name: "php{{ php7_version }}"
+    state: present
 
 - name: Install PHP packages
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items: "{{ php_extensions }}"
 
 - name: Install apache2 php7 module
   apt:
     name: "libapache2-mod-php{{ php7_version }}"
-    state: latest
-    update_cache: yes
+    state: present
+    update_cache: true
     cache_valid_time: "{{ apt_cache_valid_time | default(3600) }}"
   when: php_http_connector == 'apache'
 
@@ -60,4 +62,3 @@
     src: php_config.ini.j2
     dest: "/etc/php/{{ php7_version }}/fpm/conf.d/php_config.ini"
   when: php7_ini_fpm.stat.isdir is defined and php7_ini_fpm.stat.isdir
-

@@ -36,3 +36,7 @@ php_http_connector: apache # fpm or apache
 php_ini_lines: []
 
 ```
+
+# Development
+
+Please check [development guide](DEVELOPMENT.md) for details about developing and testing this role.
