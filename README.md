@@ -1,6 +1,6 @@
 # php7
 
-[![Build Status](https://travis-ci.com/iroquoisorg/ansible-role-php7.svg?branch=master)](https://travis-ci.com/iroquoisorg/ansible-role-memcached)
+[![Build Status](https://travis-ci.com/iroquoisorg/ansible-role-php7.svg?branch=master)](https://travis-ci.com/iroquoisorg/ansible-role-php7)
 
 Ansible role for php7
 
@@ -13,7 +13,7 @@ This role was prepared and tested for Ubuntu 16.04.
 # Default settings
 
 ```
-
+---
 php7_version: "{{ php_version | default('7.2') }}"
 
 php_extensions:
@@ -31,7 +31,7 @@ php_extensions:
   - "php{{ php7_version }}-fpm"
   - php-pear
 
-php_http_connector: apache # fpm or apache
+php_http_connector: apache  # fpm or apache
 
 php_ini_lines: []
 
